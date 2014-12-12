@@ -147,6 +147,7 @@ bool CopyBit::prepare(hwc_context_t *ctx, hwc_display_contents_1_t *list) {
         return false;
     }
 
+#ifdef QCOM_BSP
     bool useCopybitForYUV = canUseCopybitForYUV(ctx);
     bool useCopybitForRGB = canUseCopybitForRGB(ctx, list);
 
@@ -169,6 +170,8 @@ bool CopyBit::prepare(hwc_context_t *ctx, hwc_display_contents_1_t *list) {
           }
        }
     }
+#endif
+
     return true;
 }
 
@@ -194,6 +197,7 @@ bool CopyBit::draw(hwc_context_t *ctx, hwc_display_contents_1_t *list, EGLDispla
     // rendering
     glFinish();
 
+#ifdef QCOM_BSP
     for (size_t i=0; i<list->numHwLayers; i++) {
         if (list->hwLayers[i].compositionType == HWC_USE_COPYBIT) {
             retVal = drawLayerUsingCopybit(ctx, &(list->hwLayers[i]),
@@ -205,6 +209,7 @@ bool CopyBit::draw(hwc_context_t *ctx, hwc_display_contents_1_t *list, EGLDispla
            }
         }
     }
+#endif
     return true;
 }
 

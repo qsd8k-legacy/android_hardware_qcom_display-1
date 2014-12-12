@@ -63,7 +63,9 @@ enum HWCCompositionType {
     HWC_USE_OVERLAY = HWC_OVERLAY, // This layer is to be handled by the overlay
     HWC_USE_BACKGROUND
                 = HWC_BACKGROUND,  // This layer is to be handled by TBD
+#ifdef QCOM_BSP
     HWC_USE_COPYBIT = HWC_BLIT,    // This layer is to be handled by copybit
+#endif
 };
 
 enum {

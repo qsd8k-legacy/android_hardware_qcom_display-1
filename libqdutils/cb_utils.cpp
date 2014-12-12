@@ -63,8 +63,10 @@ bool CBUtils::isUpdatingFB(int Type)
 {
     switch((qhwc::HWCCompositionType)Type)
     {
+#ifdef QCOM_BSP
         case qhwc::HWC_USE_COPYBIT:
             return true;
+#endif
         default:
             ALOGE("%s: invalid composition type(%d)", __FUNCTION__, Type);
             return false;
