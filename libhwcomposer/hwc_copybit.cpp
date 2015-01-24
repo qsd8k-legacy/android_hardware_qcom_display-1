@@ -19,6 +19,7 @@
  */
 
 #define DEBUG_COPYBIT 0
+#include <sync/sync.h>
 #include <copybit.h>
 #include <genlock.h>
 #include <GLES/gl.h>
@@ -200,6 +201,18 @@ bool CopyBit::draw(hwc_context_t *ctx, hwc_display_contents_1_t *list, EGLDispla
 #ifdef QCOM_BSP
     for (size_t i=0; i<list->numHwLayers; i++) {
         if (list->hwLayers[i].compositionType == HWC_USE_COPYBIT) {
+
+            if (list->hwLayers[i].acquireFenceFd != -1 ) {
+                // Wait for acquire Fence on the App buffers.
+                retVal = sync_wait(list->hwLayers[i].acquireFenceFd, 1000);
+                if(retVal < 0) {
+                    ALOGE("%s: sync_wait error!! error no = %d err str = %s",
+                                        __FUNCTION__, errno, strerror(errno));
+                }
+                close(list->hwLayers[i].acquireFenceFd);
+                list->hwLayers[i].acquireFenceFd = -1;
+            }
+
             retVal = drawLayerUsingCopybit(ctx, &(list->hwLayers[i]),
                                                      (EGLDisplay)dpy,
                                                      (EGLSurface)sur,
