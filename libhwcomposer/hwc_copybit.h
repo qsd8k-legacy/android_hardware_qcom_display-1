@@ -25,6 +25,7 @@
 #include <gralloc_priv.h>
 #include <gr.h>
 #include <dlfcn.h>
+#include <native_buffer.h>
 
 #define LIKELY( exp )       (__builtin_expect( (exp) != 0, true  ))
 #define UNLIKELY( exp )     (__builtin_expect( (exp) != 0, false ))

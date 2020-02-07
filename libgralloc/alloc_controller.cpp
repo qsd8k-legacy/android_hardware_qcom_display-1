@@ -42,7 +42,7 @@
 #endif
 #include "ashmemalloc.h"
 #include "gr.h"
-#include "comptype.h"
+#include <comptype.h>
 
 namespace android {
 ANDROID_SINGLETON_STATIC_INSTANCE(qdutils::QCCompositionType);

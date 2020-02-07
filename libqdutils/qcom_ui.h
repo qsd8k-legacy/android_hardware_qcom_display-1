@@ -29,8 +29,8 @@
 
 #include <gralloc_priv.h>
 #include <comptype.h>
-#include <ui/Region.h>
 #include <hardware/hwcomposer.h>
+#include <ui/Region.h>
 #include "egl_handles.h"
 
 namespace qdutils {

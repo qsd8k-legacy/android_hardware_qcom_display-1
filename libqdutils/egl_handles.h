@@ -27,6 +27,7 @@
 #include <EGL/egl.h>
 #include <gralloc_priv.h>
 #include <EGL/eglext.h>
+#include <native_buffer.h>
 
 typedef EGLClientBuffer (*functype_eglGetRenderBufferANDROID) (
                                              EGLDisplay dpy,

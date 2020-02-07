@@ -11,4 +11,7 @@ LOCAL_ADDITIONAL_DEPENDENCIES := $(common_deps)
 LOCAL_SRC_FILES               := profiler.cpp mdp_version.cpp \
                                  idle_invalidator.cpp egl_handles.cpp \
                                  cb_utils.cpp
+LOCAL_C_INCLUDES              := $(common_includes) \
+				 $(kernel_includes) \
+				 frameworks/native/libs/ui/include
 include $(BUILD_SHARED_LIBRARY)
