@@ -1,4 +1,6 @@
-ifeq ($(call my-dir),$(call project-path-for,qcom-display))
+LOCAL_PATH := $(call my-dir)
+
+ifneq ($(filter qsd8k,$(TARGET_BOARD_PLATFORM)),)
 display-hals := libgralloc libgenlock libcopybit
 display-hals += libhwcomposer liboverlay libqdutils
 display-hals += libmemtrack
