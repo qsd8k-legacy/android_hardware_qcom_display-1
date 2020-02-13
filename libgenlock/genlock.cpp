@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -10,7 +10,7 @@
  *     copyright notice, this list of conditions and the following
  *     disclaimer in the documentation and/or other materials provided
  *     with the distribution.
- *   * Neither the name of Code Aurora Forum, Inc. nor the names of its
+ *   * Neither the name of The Linux Foundation nor the names of its
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
  *
@@ -30,7 +30,9 @@
 #include <cutils/log.h>
 #include <cutils/native_handle.h>
 #include <gralloc_priv.h>
+#ifdef USE_GENLOCK
 #include <linux/genlock.h>
+#endif
 #include <fcntl.h>
 #include <sys/ioctl.h>
 
@@ -38,9 +40,9 @@
 
 #define GENLOCK_DEVICE "/dev/genlock"
 
-#ifndef USE_GENLOCK
-#define USE_GENLOCK
-#endif
+
+
+#ifdef USE_GENLOCK
 
 namespace {
 /* Internal function to map the userspace locks to the kernel lock types */
@@ -124,8 +126,12 @@ namespace {
             handle = -1;
         }
     }
-
 }
+
+#endif  // USE_GENLOCK
+
+
+
 /*
  * Create a genlock lock. The genlock lock file descriptor and the lock
  * handle are stored in the buffer_handle.
@@ -136,13 +142,13 @@ namespace {
 genlock_status_t genlock_create_lock(native_handle_t *buffer_handle)
 {
     genlock_status_t ret = GENLOCK_NO_ERROR;
+#ifdef USE_GENLOCK
     if (private_handle_t::validate(buffer_handle)) {
         ALOGE("%s: handle is invalid", __FUNCTION__);
         return GENLOCK_FAILURE;
     }
 
     private_handle_t *hnd = reinterpret_cast<private_handle_t*>(buffer_handle);
-#ifdef USE_GENLOCK
     if ((hnd->flags & private_handle_t::PRIV_FLAGS_UNSYNCHRONIZED) == 0) {
         // Open the genlock device
         int fd = open(GENLOCK_DEVICE, O_RDWR);
@@ -177,8 +183,6 @@ genlock_status_t genlock_create_lock(native_handle_t *buffer_handle)
     } else {
         hnd->genlockHandle = 0;
     }
-#else
-    hnd->genlockHandle = 0;
 #endif
     return ret;
 }
