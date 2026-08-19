@@ -139,24 +139,21 @@ int gralloc_register_buffer(gralloc_module_t const* module,
             ALOGE("%s: gralloc_map failed", __FUNCTION__);
             return err;
         }
-
+        
         // Reset the genlock private fd flag in the handle
         hnd->genlockPrivFd = -1;
 
-        // Check if there is a valid lock attached to the handle.
-        if (-1 == hnd->genlockHandle) {
-            ALOGE("%s: the lock is invalid.", __FUNCTION__);
-            gralloc_unmap(module, handle);
-            hnd->base = 0;
-            return -EINVAL;
-        }
-
-        // Attach the genlock handle
-        if (GENLOCK_NO_ERROR != genlock_attach_lock((native_handle_t *)handle)) {
-            ALOGE("%s: genlock_attach_lock failed", __FUNCTION__);
-            gralloc_unmap(module, handle);
-            hnd->base = 0;
-            return -EINVAL;
+        // Genlock is unused on this build (single-fd handles, no
+        // USE_GENLOCK) so buffers never carry a lock. Only attempt to
+        // attach a lock if one is actually present; its absence is the
+        // expected case here, not an error.
+        if (-1 != hnd->genlockHandle) {
+            if (GENLOCK_NO_ERROR != genlock_attach_lock((native_handle_t *)handle)) {
+                ALOGE("%s: genlock_attach_lock failed", __FUNCTION__);
+                gralloc_unmap(module, handle);
+                hnd->base = 0;
+                return -EINVAL;
+            }
         }
     }
     return 0;

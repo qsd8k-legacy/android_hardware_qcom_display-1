@@ -264,7 +264,7 @@ struct private_handle_t : public native_handle {
 
 #ifdef __cplusplus
         static const int sNumInts = 12;
-        static const int sNumFds = 2;
+        static const int sNumFds = 1;
         static const int sMagic = 'gmsm';
 
         private_handle_t(int fd, int size, int flags, int bufferType,
@@ -275,10 +275,10 @@ struct private_handle_t : public native_handle {
             pid(getpid()), format(format),
             width(width), height(height), genlockPrivFd(-1)
         {
-            version = sizeof(native_handle);
-            numInts = sNumInts;
-            numFds = sNumFds;
-        }
+    version = sizeof(native_handle);
+    numInts = sNumInts;
+    numFds = sNumFds;
+}
         ~private_handle_t() {
             magic = 0;
         }
